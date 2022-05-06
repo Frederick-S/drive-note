@@ -2,7 +2,7 @@ import * as msal from '@azure/msal-browser'
 
 const msalConfig = {
   auth: {
-    clientId: process.env.MSAL_CLIENT_ID
+    clientId: process.env.VUE_APP_MSAL_CLIENT_ID
   }
 }
 
