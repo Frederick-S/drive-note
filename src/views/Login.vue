@@ -15,26 +15,18 @@
 </template>
 
 <script>
-import * as msal from '@azure/msal-browser'
-
-const msalConfig = {
-  auth: {
-    clientId: '8d47b31f-72c8-4f3d-a34d-a5862eded42c'
-  }
-}
+import { MsalManager } from '../msal-manager'
 
 export default {
   methods: {
     login () {
-      const msalInstance = new msal.PublicClientApplication(msalConfig)
-
-      msalInstance.loginPopup({
-        scopes: ['user.read']
-      }).then(loginResponse => {
-        console.log(loginResponse)
-      }).catch(error => {
-        console.log(error)
-      })
+      MsalManager.login()
+        .then(() => {
+          console.log('done')
+        })
+        .catch((error) => {
+          console.log(error)
+        })
     }
   }
 }
