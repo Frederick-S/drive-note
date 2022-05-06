@@ -22,7 +22,7 @@ export default {
     login () {
       MsalManager.login()
         .then(() => {
-          console.log('done')
+          this.$router.push('/notes')
         })
         .catch((error) => {
           console.log(error)
