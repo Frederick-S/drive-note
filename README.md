@@ -1,4 +1,4 @@
-# drive-note
+# drive-note [![Node.js CI](https://github.com/Frederick-S/drive-note/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/Frederick-S/drive-note/actions/workflows/build.yml)
 
 ## Project setup
 ```
