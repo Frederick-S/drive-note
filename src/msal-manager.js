@@ -37,10 +37,10 @@ const MsalManager = {
           }
 
           if (graphClient) {
-            console.log(graphClient)
+            resolve()
+          } else {
+            reject(new Error('Failed to initialize graph client'))
           }
-
-          resolve()
         })
         .catch(error => {
           console.log(error)
