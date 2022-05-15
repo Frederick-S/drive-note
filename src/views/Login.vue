@@ -9,6 +9,9 @@
         <v-row justify="space-around" class="py-6">
           <v-btn @click="login">Sign in</v-btn>
         </v-row>
+        <v-snackbar centered v-model="snackbar" :timeout="timeout" color="red">
+          {{ text }}
+        </v-snackbar>
       </v-col>
     </v-row>
   </v-container>
@@ -18,6 +21,13 @@
 import { MsalManager } from '../msal-manager'
 
 export default {
+  data () {
+    return {
+      snackbar: false,
+      text: 'Login failed',
+      timeout: 1000
+    }
+  },
   methods: {
     login () {
       MsalManager.login()
@@ -26,6 +36,8 @@ export default {
         })
         .catch((error) => {
           console.log(error)
+
+          this.snackbar = true
         })
     }
   }
