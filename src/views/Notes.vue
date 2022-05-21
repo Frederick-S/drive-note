@@ -5,11 +5,20 @@
 </template>
 
 <script>
-// import { MsalManager } from '../msal-manager'
+import { MsalManager } from '../msal-manager'
 
 export default {
   methods: {
 
+  },
+  created () {
+    MsalManager.getRootDriveItems()
+      .then((items) => {
+        console.log(items)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
   }
 }
 </script>

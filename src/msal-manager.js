@@ -10,10 +10,10 @@ const msalConfig = {
 
 let graphClient
 
-function initializeGraphClient (msalClient, account, scopes) {
+function initializeGraphClient (account, msalClient, scopes) {
   const options = {
     account,
-    interactionType: msal.InteractionType.PopUp,
+    interactionType: msal.InteractionType.Popup,
     scopes
   }
   const authProvider = new AuthCodeMSALBrowserAuthenticationProvider(msalClient, options)
@@ -29,7 +29,7 @@ const MsalManager = {
           let account = msalInstance.getActiveAccount()
 
           if (!account && msalInstance.getAllAccounts()) {
-            account = msalInstance.getAllAccounts([0])
+            account = msalInstance.getAllAccounts()[0]
           }
 
           if (account) {
@@ -50,6 +50,11 @@ const MsalManager = {
     })
 
     return promise
+  },
+  async getRootDriveItems () {
+    const response = await graphClient.api('/me/drive/root/children').get()
+
+    return response
   }
 }
 
