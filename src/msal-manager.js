@@ -13,7 +13,7 @@ let graphClient
 function initializeGraphClient (account, msalClient, scopes) {
   const options = {
     account,
-    interactionType: msal.InteractionType.Popup,
+    interactionType: msal.InteractionType.Silent,
     scopes
   }
   const authProvider = new AuthCodeMSALBrowserAuthenticationProvider(msalClient, options)
@@ -33,7 +33,7 @@ const MsalManager = {
           }
 
           if (account) {
-            initializeGraphClient(account, msalInstance, ['user.read'])
+            initializeGraphClient(account, msalInstance, ['user.read', 'Files.ReadWrite'])
           }
 
           if (graphClient) {
