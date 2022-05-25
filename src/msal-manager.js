@@ -7,22 +7,21 @@ const msalConfig = {
     clientId: process.env.VUE_APP_MSAL_CLIENT_ID
   }
 }
+const msalInstance = new msal.PublicClientApplication(msalConfig)
 
 let graphClient
 
-function initializeGraphClient (account, msalClient, scopes) {
-  const options = {
-    account,
-    interactionType: msal.InteractionType.Silent,
-    scopes
-  }
-  const authProvider = new AuthCodeMSALBrowserAuthenticationProvider(msalClient, options)
-  graphClient = Client.initWithMiddleware({ authProvider })
-}
-
 const MsalManager = {
+  initializeGraphClient (account, scopes) {
+    const options = {
+      account,
+      interactionType: msal.InteractionType.Silent,
+      scopes
+    }
+    const authProvider = new AuthCodeMSALBrowserAuthenticationProvider(msalInstance, options)
+    graphClient = Client.initWithMiddleware({ authProvider })
+  },
   login () {
-    const msalInstance = new msal.PublicClientApplication(msalConfig)
     const promise = new Promise((resolve, reject) => {
       msalInstance.loginPopup({ scopes: ['user.read'] })
         .then(response => {
@@ -33,13 +32,9 @@ const MsalManager = {
           }
 
           if (account) {
-            initializeGraphClient(account, msalInstance, ['user.read', 'Files.ReadWrite'])
-          }
-
-          if (graphClient) {
-            resolve()
+            resolve(account)
           } else {
-            reject(new Error('Failed to initialize graph client'))
+            reject(new Error('No account found'))
           }
         })
         .catch(error => {

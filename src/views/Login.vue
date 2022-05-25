@@ -31,7 +31,11 @@ export default {
   methods: {
     login () {
       MsalManager.login()
-        .then(() => {
+        .then((account) => {
+          MsalManager.initializeGraphClient(account, ['user.read', 'Files.ReadWrite'])
+
+          localStorage.setItem('drive-note-account', JSON.stringify(account))
+
           this.$router.push('/notes')
         })
         .catch((error) => {

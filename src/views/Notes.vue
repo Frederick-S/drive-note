@@ -14,7 +14,9 @@ export default {
   created () {
     MsalManager.getRootDriveItems()
       .then((items) => {
-        console.log(items)
+        const folders = items.value.filter(item => item.folder)
+
+        console.log(folders)
       })
       .catch((error) => {
         console.log(error)
