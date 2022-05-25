@@ -1,20 +1,27 @@
 <template>
   <v-container>
-    <v-treeview
-      v-model="tree"
-      :items="items"
-      activatable
-      item-key="name"
-      open-on-click>
-      <template v-slot:prepend="{ item, open }">
-        <v-icon v-if="!item.file">
-          {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
-        </v-icon>
-        <v-icon v-else>
-          {{ files[item.file] }}
-        </v-icon>
-      </template>
-    </v-treeview>
+    <v-row>
+      <v-col
+        cols="3"
+      >
+        <v-treeview
+          v-model="tree"
+          :items="items"
+          activatable
+          item-key="name"
+          open-on-click>
+          <template v-slot:prepend="{ item, open }">
+            <v-icon v-if="!item.file">
+              {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
+            </v-icon>
+            <v-icon v-else>
+              {{ files[item.file] }}
+            </v-icon>
+          </template>
+        </v-treeview>
+      </v-col>
+      <v-col cols="9"></v-col>
+    </v-row>
   </v-container>
 </template>
 
