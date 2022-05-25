@@ -8,14 +8,14 @@
           :items="items"
           :load-children="fetchChildren"
           activatable
-          item-key="name"
+          item-key="id"
           open-on-click>
           <template v-slot:prepend="{ item, open }">
-            <v-icon v-if="!item.file">
+            <v-icon v-if="!item.fileType">
               {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
             </v-icon>
             <v-icon v-else>
-              {{ files[item.file] }}
+              {{ fileTypes[item.fileType] }}
             </v-icon>
           </template>
         </v-treeview>
@@ -31,6 +31,17 @@ import { MsalManager } from '../msal-manager'
 export default {
   data () {
     return {
+      fileTypes: {
+        html: 'mdi-language-html5',
+        js: 'mdi-nodejs',
+        json: 'mdi-json',
+        md: 'mdi-markdown',
+        pdf: 'mdi-file-pdf-box',
+        png: 'mdi-image',
+        txt: 'mdi-file-document',
+        xls: 'mdi-file-excel',
+        file: 'mdi-file'
+      },
       items: []
     }
   },
@@ -46,7 +57,12 @@ export default {
 
             if (it.folder) {
               child.children = []
+            } else if (it.file) {
+              const fileType = it.file.mimeType.split('/')[1]
+
+              child.fileType = fileType || 'file'
             } else {
+              child.fileType = 'file'
             }
 
             return child
@@ -65,6 +81,12 @@ export default {
 
           if (it.folder) {
             child.children = []
+          } else if (it.file) {
+            const fileType = it.file.mimeType.split('/')[1]
+
+            child.fileType = this.fileTypes[fileType] || 'file'
+          } else {
+            child.fileType = 'file'
           }
 
           return child
