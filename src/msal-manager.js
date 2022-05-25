@@ -52,9 +52,10 @@ const MsalManager = {
     return promise
   },
   async getRootDriveItems () {
-    const response = await graphClient.api('/me/drive/root/children').get()
-
-    return response
+    return await graphClient.api('/me/drive/root/children').get()
+  },
+  async getDriveItemChildren (itemId) {
+    return await graphClient.api(`/me/drive/items/${itemId}/children`).get()
   }
 }
 

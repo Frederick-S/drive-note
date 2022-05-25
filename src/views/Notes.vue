@@ -5,8 +5,8 @@
         cols="3"
       >
         <v-treeview
-          v-model="tree"
           :items="items"
+          :load-children="fetchChildren"
           activatable
           item-key="name"
           open-on-click>
@@ -31,22 +31,43 @@ import { MsalManager } from '../msal-manager'
 export default {
   data () {
     return {
-      tree: [],
       items: []
     }
   },
   methods: {
+    async fetchChildren (item) {
+      return MsalManager.getDriveItemChildren(item.id)
+        .then((response) => {
+          item.children = response.value.map(it => {
+            const child = {
+              id: it.id,
+              name: it.name
+            }
 
+            if (it.folder) {
+              child.children = []
+            } else {
+            }
+
+            return child
+          })
+        })
+    }
   },
   created () {
     MsalManager.getRootDriveItems()
-      .then((items) => {
-        const folders = items.value.filter(item => item.folder)
-
-        this.items = folders.map(it => {
-          return {
+      .then((response) => {
+        this.items = response.value.map(it => {
+          const child = {
+            id: it.id,
             name: it.name
           }
+
+          if (it.folder) {
+            child.children = []
+          }
+
+          return child
         })
       })
       .catch((error) => {
