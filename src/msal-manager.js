@@ -2,6 +2,7 @@ import * as msal from '@azure/msal-browser'
 import { AuthCodeMSALBrowserAuthenticationProvider } from '@microsoft/microsoft-graph-client/authProviders/authCodeMsalBrowser'
 import { Client } from '@microsoft/microsoft-graph-client'
 
+const scopes = ['user.read', 'Files.ReadWrite']
 const msalConfig = {
   auth: {
     clientId: process.env.VUE_APP_MSAL_CLIENT_ID
@@ -12,7 +13,7 @@ const msalInstance = new msal.PublicClientApplication(msalConfig)
 let graphClient
 
 const MsalManager = {
-  initializeGraphClient (account, scopes) {
+  initializeGraphClient (account) {
     const options = {
       account,
       interactionType: msal.InteractionType.Silent,
@@ -20,6 +21,10 @@ const MsalManager = {
     }
     const authProvider = new AuthCodeMSALBrowserAuthenticationProvider(msalInstance, options)
     graphClient = Client.initWithMiddleware({ authProvider })
+
+    if (!graphClient) {
+      throw new Error('Failed to initialize graph client')
+    }
   },
   login () {
     const promise = new Promise((resolve, reject) => {

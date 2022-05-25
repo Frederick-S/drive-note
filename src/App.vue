@@ -15,7 +15,8 @@ export default {
     if (!account) {
       this.$router.push('/login')
     } else {
-      MsalManager.initializeGraphClient(account, ['user.read', 'Files.ReadWrite'])
+      // Todo: check if account is still valid
+      MsalManager.initializeGraphClient(account)
 
       this.$router.push('/notes')
     }

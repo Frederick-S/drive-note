@@ -9,7 +9,11 @@
         <v-row justify="space-around" class="py-6">
           <v-btn @click="login">Sign in</v-btn>
         </v-row>
-        <v-snackbar centered v-model="snackbar" :timeout="timeout" color="red">
+        <v-snackbar
+          centered
+          v-model="snackbar"
+          :timeout="timeout"
+          color="red">
           {{ text }}
         </v-snackbar>
       </v-col>
@@ -32,7 +36,7 @@ export default {
     login () {
       MsalManager.login()
         .then((account) => {
-          MsalManager.initializeGraphClient(account, ['user.read', 'Files.ReadWrite'])
+          MsalManager.initializeGraphClient(account)
 
           localStorage.setItem('drive-note-account', JSON.stringify(account))
 
