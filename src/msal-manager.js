@@ -51,10 +51,10 @@ const MsalManager = {
 
     return promise
   },
-  async getRootDriveItems () {
+  getRootDriveItems () {
     return graphClient.api('/me/drive/root/children').get()
   },
-  async getDriveItemChildren (itemId) {
+  getDriveItemChildren (itemId) {
     return graphClient.api(`/me/drive/items/${itemId}/children`).get()
   }
 }

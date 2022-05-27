@@ -34,8 +34,8 @@ export default {
       fileTypes: {
         html: 'mdi-language-html5',
         js: 'mdi-nodejs',
-        json: 'mdi-json',
-        md: 'mdi-markdown',
+        json: 'mdi-code-json',
+        md: 'mdi-language-markdown',
         pdf: 'mdi-file-pdf-box',
         png: 'mdi-image',
         txt: 'mdi-file-document',
@@ -46,7 +46,7 @@ export default {
     }
   },
   methods: {
-    async fetchChildren (item) {
+    fetchChildren (item) {
       return MsalManager.getDriveItemChildren(item.id)
         .then((response) => {
           item.children = response.value.map(it => {
