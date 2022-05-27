@@ -110,7 +110,7 @@ export default {
           item.children = getTreeItems(response.value, this.fileTypes)
         })
         .catch((error) => {
-          console.log(error)
+          console.error(error)
 
           if (error.code === 'InvalidAuthenticationToken') {
             this.$router.push('/login')
@@ -118,7 +118,17 @@ export default {
         })
     },
     createMarkdownFile () {
+      GraphClient.createMarkdownFile()
+        .then((response) => {
+          console.log(response)
+        })
+        .catch((error) => {
+          console.error(error)
 
+          if (error.code === 'InvalidAuthenticationToken') {
+            this.$router.push('/login')
+          }
+        })
     }
   },
   created () {
@@ -127,7 +137,7 @@ export default {
         this.items = getTreeItems(response.value, this.fileTypes)
       })
       .catch((error) => {
-        console.log(error)
+        console.error(error)
 
         if (error.code === 'InvalidAuthenticationToken') {
           this.$router.push('/login')

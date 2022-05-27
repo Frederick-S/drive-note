@@ -44,7 +44,7 @@ export default {
           this.$router.push('/notes')
         })
         .catch((error) => {
-          console.log(error)
+          console.error(error)
 
           this.snackbar = true
         })
