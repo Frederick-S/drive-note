@@ -7,8 +7,7 @@
         <v-row>
           <v-container>
             <v-menu
-              offset-y
-              :rounded="rounded">
+              offset-y>
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
                   color="primary"
@@ -19,10 +18,16 @@
                 </v-btn>
               </template>
               <v-list>
-                <v-list-item>
+                <v-list-item link @click="createMarkdownFile">
                   <v-icon>mdi-language-markdown</v-icon>
                   <v-list-item-title>
                     Markdown File
+                  </v-list-item-title>
+                </v-list-item>
+                <v-list-item link>
+                  <v-icon>mdi-folder</v-icon>
+                  <v-list-item-title>
+                    Folder
                   </v-list-item-title>
                 </v-list-item>
               </v-list>
@@ -53,7 +58,7 @@
 </template>
 
 <script>
-import { MsalManager } from '../msal-manager'
+import { GraphClient } from '../msal-manager'
 
 function getTreeItems (items, fileTypes) {
   return items.map(it => {
@@ -100,7 +105,7 @@ export default {
   },
   methods: {
     fetchChildren (item) {
-      return MsalManager.getDriveItemChildren(item.id)
+      return GraphClient.getDriveItemChildren(item.id)
         .then((response) => {
           item.children = getTreeItems(response.value, this.fileTypes)
         })
@@ -111,10 +116,13 @@ export default {
             this.$router.push('/login')
           }
         })
+    },
+    createMarkdownFile () {
+
     }
   },
   created () {
-    MsalManager.getRootDriveItems()
+    GraphClient.getRootDriveItems()
       .then((response) => {
         this.items = getTreeItems(response.value, this.fileTypes)
       })

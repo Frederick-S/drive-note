@@ -50,7 +50,10 @@ const MsalManager = {
     })
 
     return promise
-  },
+  }
+}
+
+const GraphClient = {
   getRootDriveItems () {
     return graphClient.api('/me/drive/root/children').get()
   },
@@ -60,5 +63,6 @@ const MsalManager = {
 }
 
 export {
-  MsalManager
+  MsalManager,
+  GraphClient
 }
