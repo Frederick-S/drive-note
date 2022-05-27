@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import { GraphClient } from '../msal-manager'
+import { GraphClient } from '../graph-client'
 
 function getTreeItems (items, fileTypes) {
   return items.map(it => {

@@ -1,8 +1,5 @@
 import * as msal from '@azure/msal-browser'
-import { AuthCodeMSALBrowserAuthenticationProvider } from '@microsoft/microsoft-graph-client/authProviders/authCodeMsalBrowser'
-import { Client } from '@microsoft/microsoft-graph-client'
 
-const scopes = ['user.read', 'Files.ReadWrite']
 const msalConfig = {
   auth: {
     clientId: process.env.VUE_APP_MSAL_CLIENT_ID
@@ -10,21 +7,9 @@ const msalConfig = {
 }
 const msalInstance = new msal.PublicClientApplication(msalConfig)
 
-let graphClient
-
 const MsalManager = {
-  initializeGraphClient (account) {
-    const options = {
-      account,
-      interactionType: msal.InteractionType.Silent,
-      scopes
-    }
-    const authProvider = new AuthCodeMSALBrowserAuthenticationProvider(msalInstance, options)
-    graphClient = Client.initWithMiddleware({ authProvider })
-
-    if (!graphClient) {
-      throw new Error('Failed to initialize graph client')
-    }
+  getMsalInstance () {
+    return msalInstance
   },
   login () {
     const promise = new Promise((resolve, reject) => {
@@ -53,16 +38,6 @@ const MsalManager = {
   }
 }
 
-const GraphClient = {
-  getRootDriveItems () {
-    return graphClient.api('/me/drive/root/children').get()
-  },
-  getDriveItemChildren (itemId) {
-    return graphClient.api(`/me/drive/items/${itemId}/children`).get()
-  }
-}
-
 export {
-  MsalManager,
-  GraphClient
+  MsalManager
 }

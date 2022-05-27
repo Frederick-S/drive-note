@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { MsalManager } from './msal-manager'
+import { GraphClient } from './graph-client'
 
 export default {
   name: 'App',
@@ -16,7 +16,7 @@ export default {
       this.$router.push('/login')
     } else {
       // Todo: check if account is still valid
-      MsalManager.initializeGraphClient(account)
+      GraphClient.init(account)
 
       this.$router.push('/notes')
     }

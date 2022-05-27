@@ -23,6 +23,7 @@
 
 <script>
 import { MsalManager } from '../msal-manager'
+import { GraphClient } from '../graph-client'
 
 export default {
   data () {
@@ -36,7 +37,7 @@ export default {
     login () {
       MsalManager.login()
         .then((account) => {
-          MsalManager.initializeGraphClient(account)
+          GraphClient.init(account)
 
           localStorage.setItem('drive-note-account', JSON.stringify(account))
 
