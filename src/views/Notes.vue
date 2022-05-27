@@ -68,6 +68,13 @@ export default {
             return child
           })
         })
+        .catch((error) => {
+          console.log(error)
+
+          if (error.code === 'InvalidAuthenticationToken') {
+            this.$router.push('/login')
+          }
+        })
     }
   },
   created () {
@@ -94,6 +101,10 @@ export default {
       })
       .catch((error) => {
         console.log(error)
+
+        if (error.code === 'InvalidAuthenticationToken') {
+          this.$router.push('/login')
+        }
       })
   }
 }
