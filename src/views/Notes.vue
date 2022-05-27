@@ -38,6 +38,7 @@ export default {
         md: 'mdi-language-markdown',
         pdf: 'mdi-file-pdf-box',
         png: 'mdi-image',
+        jpeg: 'mdi-image',
         txt: 'mdi-file-document',
         xls: 'mdi-file-excel',
         file: 'mdi-file'
@@ -60,7 +61,11 @@ export default {
             } else if (it.file) {
               const fileType = it.file.mimeType.split('/')[1]
 
-              child.fileType = fileType || 'file'
+              if (this.fileTypes[fileType]) {
+                child.fileType = fileType
+              } else {
+                child.fileType = 'file'
+              }
             } else {
               child.fileType = 'file'
             }
@@ -91,7 +96,11 @@ export default {
           } else if (it.file) {
             const fileType = it.file.mimeType.split('/')[1]
 
-            child.fileType = this.fileTypes[fileType] || 'file'
+            if (this.fileTypes[fileType]) {
+              child.fileType = fileType
+            } else {
+              child.fileType = 'file'
+            }
           } else {
             child.fileType = 'file'
           }
