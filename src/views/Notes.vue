@@ -4,21 +4,48 @@
       <v-col
         cols="3"
       >
-        <v-treeview
-          :items="items"
-          :load-children="fetchChildren"
-          activatable
-          item-key="id"
-          open-on-click>
-          <template v-slot:prepend="{ item, open }">
-            <v-icon v-if="!item.fileType">
-              {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
-            </v-icon>
-            <v-icon v-else>
-              {{ fileTypes[item.fileType] }}
-            </v-icon>
-          </template>
-        </v-treeview>
+        <v-row>
+          <v-container>
+            <v-menu
+              offset-y
+              :rounded="rounded">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  color="primary"
+                  dark
+                  v-bind="attrs"
+                  v-on="on">
+                  <v-icon>mdi-plus</v-icon>New
+                </v-btn>
+              </template>
+              <v-list>
+                <v-list-item>
+                  <v-icon>mdi-language-markdown</v-icon>
+                  <v-list-item-title>
+                    Markdown File
+                  </v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+          </v-container>
+        </v-row>
+        <v-row>
+          <v-treeview
+            :items="items"
+            :load-children="fetchChildren"
+            activatable
+            item-key="id"
+            open-on-click>
+            <template v-slot:prepend="{ item, open }">
+              <v-icon v-if="!item.fileType">
+                {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
+              </v-icon>
+              <v-icon v-else>
+                {{ fileTypes[item.fileType] }}
+              </v-icon>
+            </template>
+          </v-treeview>
+        </v-row>
       </v-col>
       <v-col cols="9"></v-col>
     </v-row>
