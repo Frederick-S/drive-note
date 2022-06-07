@@ -1,5 +1,44 @@
 <template>
   <v-container>
+    <v-dialog
+      v-model="dialog"
+      width="500"
+    >
+      <v-card>
+        <v-card-title>
+          <span class="text-h5">Create New Markdown File</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col cols="12">
+                <v-text-field
+                  label="File Name"
+                  required
+                ></v-text-field>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="blue darken-1"
+            text
+            @click="dialog = false"
+          >
+            Close
+          </v-btn>
+          <v-btn
+            color="blue darken-1"
+            text
+            @click="dialog = false"
+          >
+            Save
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <v-row>
       <v-col
         cols="3"
@@ -18,7 +57,7 @@
                 </v-btn>
               </template>
               <v-list>
-                <v-list-item link @click="createMarkdownFile">
+                <v-list-item link @click="createMarkdownFileDialog">
                   <v-icon>mdi-language-markdown</v-icon>
                   <v-list-item-title>
                     Markdown File
@@ -100,7 +139,8 @@ export default {
         xls: 'mdi-file-excel',
         file: 'mdi-file'
       },
-      items: []
+      items: [],
+      dialog: false
     }
   },
   methods: {
@@ -116,6 +156,9 @@ export default {
             this.$router.push('/login')
           }
         })
+    },
+    createMarkdownFileDialog () {
+      this.dialog = true
     },
     createMarkdownFile () {
       GraphClient.createMarkdownFile()
