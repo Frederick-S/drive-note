@@ -98,13 +98,16 @@
           </v-treeview>
         </v-row>
       </v-col>
-      <v-col cols="9"></v-col>
+      <v-col cols="9">
+        <Editor></Editor>
+      </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
 import { GraphClient } from '../graph/graph-client'
+import Editor from '../components/Editor'
 
 function getTreeItems (items, fileTypes, parent) {
   return items.map(it => {
@@ -135,6 +138,9 @@ function getTreeItems (items, fileTypes, parent) {
 }
 
 export default {
+  components: {
+    Editor
+  },
   data () {
     return {
       fileTypes: {
