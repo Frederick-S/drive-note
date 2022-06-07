@@ -32,7 +32,7 @@ export default {
         .catch((error) => {
           console.error(error)
 
-          this.$toast.error('Error signing in')
+          this.$toast.error(`Error signing in: ${error.message}`)
         })
     }
   }

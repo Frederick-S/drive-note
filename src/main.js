@@ -10,7 +10,7 @@ Vue.config.productionTip = false
 
 Vue.use(Toast, {
   position: POSITION.TOP_CENTER,
-  timeout: 1000
+  timeout: 2000
 })
 
 new Vue({
