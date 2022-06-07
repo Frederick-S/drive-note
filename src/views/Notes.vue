@@ -80,7 +80,8 @@
             :load-children="fetchChildren"
             activatable
             item-key="id"
-            open-on-click>
+            open-on-click
+            @update:active="selectFile">
             <template v-slot:prepend="{ item, open }">
               <v-icon v-if="!item.fileType">
                 {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
@@ -146,6 +147,9 @@ export default {
     }
   },
   methods: {
+    selectFile (id) {
+      console.log(id)
+    },
     fetchChildren (item) {
       return GraphClient.getDriveItemChildren(item.id)
         .then((response) => {
