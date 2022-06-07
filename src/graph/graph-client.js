@@ -27,8 +27,12 @@ const GraphClient = {
   getDriveItemChildren (itemId) {
     return graphClient.api(`/me/drive/items/${itemId}/children`).get()
   },
-  createMarkdownFile (fileName) {
-    return graphClient.api(`/me/drive/root:/${fileName}.md:/content`).put()
+  createMarkdownFile (fileName, parentId) {
+    if (parentId) {
+      return graphClient.api(`/me/drive/items/${parentId}:/${fileName}.md:/content`).put()
+    } else {
+      return graphClient.api(`/me/drive/root:/${fileName}.md:/content`).put()
+    }
   }
 }
 

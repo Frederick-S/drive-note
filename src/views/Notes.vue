@@ -80,8 +80,7 @@
             :load-children="fetchChildren"
             activatable
             item-key="id"
-            open-on-click
-            @update:active="selectFile">
+            open-on-click>
             <template v-slot:prepend="{ item, open }">
               <v-icon v-if="!item.fileType">
                 {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
@@ -89,6 +88,9 @@
               <v-icon v-else>
                 {{ fileTypes[item.fileType] }}
               </v-icon>
+            </template>
+            <template v-slot:label="{ item }">
+              <span @click="selectDriveItem(item)">{{ item.name }}</span>
             </template>
           </v-treeview>
         </v-row>
@@ -101,11 +103,12 @@
 <script>
 import { GraphClient } from '../graph/graph-client'
 
-function getTreeItems (items, fileTypes) {
+function getTreeItems (items, fileTypes, parentId) {
   return items.map(it => {
     const child = {
       id: it.id,
-      name: it.name
+      name: it.name,
+      parentId
     }
 
     if (it.folder) {
@@ -143,17 +146,18 @@ export default {
       },
       items: [],
       newMarkdownFileDialog: false,
-      newFileName: ''
+      newFileName: '',
+      selectedDriveItem: null
     }
   },
   methods: {
-    selectFile (id) {
-      console.log(id)
+    selectDriveItem (item) {
+      this.selectedDriveItem = item
     },
     fetchChildren (item) {
       return GraphClient.getDriveItemChildren(item.id)
         .then((response) => {
-          item.children = getTreeItems(response.value, this.fileTypes)
+          item.children = getTreeItems(response.value, this.fileTypes, item.id)
         })
         .catch((error) => {
           console.error(error)
@@ -164,7 +168,13 @@ export default {
         })
     },
     createMarkdownFile () {
-      GraphClient.createMarkdownFile(this.newFileName)
+      let parentId = ''
+
+      if (this.selectedDriveItem) {
+        parentId = this.selectedDriveItem.fileType ? this.selectedDriveItem.parentId : this.selectedDriveItem.id
+      }
+
+      GraphClient.createMarkdownFile(this.newFileName, parentId)
         .then((response) => {
           console.log(response)
         })
@@ -186,7 +196,7 @@ export default {
   created () {
     GraphClient.getRootDriveItems()
       .then((response) => {
-        this.items = getTreeItems(response.value, this.fileTypes)
+        this.items = getTreeItems(response.value, this.fileTypes, '')
       })
       .catch((error) => {
         console.error(error)
