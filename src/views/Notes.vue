@@ -57,7 +57,7 @@
                 </v-btn>
               </template>
               <v-list>
-                <v-list-item link @click="createMarkdownFileDialog">
+                <v-list-item link @click="dialog = true">
                   <v-icon>mdi-language-markdown</v-icon>
                   <v-list-item-title>
                     Markdown File
@@ -156,9 +156,6 @@ export default {
             this.$router.push('/login')
           }
         })
-    },
-    createMarkdownFileDialog () {
-      this.dialog = true
     },
     createMarkdownFile () {
       GraphClient.createMarkdownFile()
