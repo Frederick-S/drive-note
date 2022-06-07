@@ -29,9 +29,9 @@ const GraphClient = {
   },
   createMarkdownFile (fileName, parentId) {
     if (parentId) {
-      return graphClient.api(`/me/drive/items/${parentId}:/${fileName}.md:/content`).put()
+      return graphClient.api(`/me/drive/items/${parentId}:/${fileName}:/content`).put()
     } else {
-      return graphClient.api(`/me/drive/root:/${fileName}.md:/content`).put()
+      return graphClient.api(`/me/drive/root:/${fileName}:/content`).put()
     }
   }
 }

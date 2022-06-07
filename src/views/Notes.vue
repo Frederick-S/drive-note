@@ -41,48 +41,51 @@
       </v-card>
     </v-dialog>
     <v-row>
+      <v-col cols=3>
+        <v-container>
+          <v-menu
+            offset-y>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                color="primary"
+                dark
+                v-bind="attrs"
+                v-on="on">
+                <v-icon>mdi-plus</v-icon>New
+              </v-btn>
+            </template>
+            <v-list>
+              <v-list-item link @click="newMarkdownFileDialog = true">
+                <v-icon>mdi-language-markdown</v-icon>
+                <v-list-item-title>
+                  Markdown File
+                </v-list-item-title>
+              </v-list-item>
+              <v-list-item link>
+                <v-icon>mdi-folder</v-icon>
+                <v-list-item-title>
+                  Folder
+                </v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </v-container>
+      </v-col>
+    </v-row>
+    <v-row>
       <v-col
         cols="3"
       >
         <v-row>
-          <v-container>
-            <v-menu
-              offset-y>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                  color="primary"
-                  dark
-                  v-bind="attrs"
-                  v-on="on">
-                  <v-icon>mdi-plus</v-icon>New
-                </v-btn>
-              </template>
-              <v-list>
-                <v-list-item link @click="newMarkdownFileDialog = true">
-                  <v-icon>mdi-language-markdown</v-icon>
-                  <v-list-item-title>
-                    Markdown File
-                  </v-list-item-title>
-                </v-list-item>
-                <v-list-item link>
-                  <v-icon>mdi-folder</v-icon>
-                  <v-list-item-title>
-                    Folder
-                  </v-list-item-title>
-                </v-list-item>
-              </v-list>
-            </v-menu>
-          </v-container>
-        </v-row>
-        <v-row>
           <v-treeview
             :items="items"
+            :active="activeDriveItems"
             :load-children="fetchChildren"
             activatable
             item-key="id"
             open-on-click>
             <template v-slot:prepend="{ item, open }">
-              <v-icon v-if="!item.fileType">
+              <v-icon v-if="!item.isFile">
                 {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
               </v-icon>
               <v-icon v-else>
@@ -103,15 +106,17 @@
 <script>
 import { GraphClient } from '../graph/graph-client'
 
-function getTreeItems (items, fileTypes, parentId) {
+function getTreeItems (items, fileTypes, parent) {
   return items.map(it => {
     const child = {
       id: it.id,
       name: it.name,
-      parentId
+      parent,
+      isFile: true
     }
 
     if (it.folder) {
+      child.isFile = false
       child.children = []
     } else if (it.file) {
       const fileType = it.file.mimeType.split('/')[1]
@@ -147,7 +152,8 @@ export default {
       items: [],
       newMarkdownFileDialog: false,
       newFileName: '',
-      selectedDriveItem: null
+      selectedDriveItem: null,
+      activeDriveItems: []
     }
   },
   methods: {
@@ -157,7 +163,7 @@ export default {
     fetchChildren (item) {
       return GraphClient.getDriveItemChildren(item.id)
         .then((response) => {
-          item.children = getTreeItems(response.value, this.fileTypes, item.id)
+          item.children = getTreeItems(response.value, this.fileTypes, item)
         })
         .catch((error) => {
           console.error(error)
@@ -171,12 +177,27 @@ export default {
       let parentId = ''
 
       if (this.selectedDriveItem) {
-        parentId = this.selectedDriveItem.fileType ? this.selectedDriveItem.parentId : this.selectedDriveItem.id
+        parentId = this.selectedDriveItem.isFile ? this.selectedDriveItem.parentId : this.selectedDriveItem.id
       }
 
-      GraphClient.createMarkdownFile(this.newFileName, parentId)
+      const fileName = `${this.newFileName}.md`
+
+      GraphClient.createMarkdownFile(fileName, parentId)
         .then((response) => {
-          console.log(response)
+          const item = {
+            id: response.id,
+            name: response.name,
+            fileType: 'file',
+            isFile: true
+          }
+
+          if (this.selectedDriveItem) {
+            const parent = this.selectedDriveItem.isFile ? this.selectedDriveItem.parent : this.selectedDriveItem
+
+            parent.children.push(item)
+          } else {
+            this.items.push(item)
+          }
         })
         .catch((error) => {
           console.error(error)
@@ -196,7 +217,7 @@ export default {
   created () {
     GraphClient.getRootDriveItems()
       .then((response) => {
-        this.items = getTreeItems(response.value, this.fileTypes, '')
+        this.items = getTreeItems(response.value, this.fileTypes, null)
       })
       .catch((error) => {
         console.error(error)
