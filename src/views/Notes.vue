@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-dialog
-      v-model="dialog"
+      v-model="newMarkdownFileDialog"
       width="500"
     >
       <v-card>
@@ -25,14 +25,14 @@
           <v-btn
             color="blue darken-1"
             text
-            @click="dialog = false"
+            @click="newMarkdownFileDialog = false"
           >
             Close
           </v-btn>
           <v-btn
             color="blue darken-1"
             text
-            @click="dialog = false"
+            @click="newMarkdownFileDialog = false"
           >
             Save
           </v-btn>
@@ -57,7 +57,7 @@
                 </v-btn>
               </template>
               <v-list>
-                <v-list-item link @click="dialog = true">
+                <v-list-item link @click="newMarkdownFileDialog = true">
                   <v-icon>mdi-language-markdown</v-icon>
                   <v-list-item-title>
                     Markdown File
@@ -140,7 +140,7 @@ export default {
         file: 'mdi-file'
       },
       items: [],
-      dialog: false
+      newMarkdownFileDialog: false
     }
   },
   methods: {
