@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { GraphClient } from './graph-client'
+import { GraphClient } from './graph/graph-client'
 
 export default {
   name: 'App',

@@ -97,7 +97,7 @@
 </template>
 
 <script>
-import { GraphClient } from '../graph-client'
+import { GraphClient } from '../graph/graph-client'
 
 function getTreeItems (items, fileTypes) {
   return items.map(it => {

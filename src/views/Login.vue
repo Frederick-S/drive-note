@@ -22,8 +22,8 @@
 </template>
 
 <script>
-import { MsalManager } from '../msal-manager'
-import { GraphClient } from '../graph-client'
+import { MsalManager } from '../graph/msal-manager'
+import { GraphClient } from '../graph/graph-client'
 
 export default {
   data () {
