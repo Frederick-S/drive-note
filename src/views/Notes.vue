@@ -198,6 +198,8 @@ export default {
           } else {
             this.items.push(item)
           }
+
+          this.activeDriveItems = [item.id]
         })
         .catch((error) => {
           console.error(error)
