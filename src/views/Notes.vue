@@ -15,6 +15,7 @@
                 <v-text-field
                   label="File Name"
                   required
+                  v-model="newFileName"
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -25,14 +26,14 @@
           <v-btn
             color="blue darken-1"
             text
-            @click="newMarkdownFileDialog = false"
+            @click="newMarkdownFileDialog = false; newFileName = ''"
           >
             Close
           </v-btn>
           <v-btn
             color="blue darken-1"
             text
-            @click="newMarkdownFileDialog = false"
+            @click="createMarkdownFile"
           >
             Save
           </v-btn>
@@ -140,7 +141,8 @@ export default {
         file: 'mdi-file'
       },
       items: [],
-      newMarkdownFileDialog: false
+      newMarkdownFileDialog: false,
+      newFileName: ''
     }
   },
   methods: {
@@ -158,7 +160,7 @@ export default {
         })
     },
     createMarkdownFile () {
-      GraphClient.createMarkdownFile()
+      GraphClient.createMarkdownFile(this.newFileName)
         .then((response) => {
           console.log(response)
         })
@@ -167,7 +169,13 @@ export default {
 
           if (error.code === 'InvalidAuthenticationToken') {
             this.$router.push('/login')
+          } else {
+            this.$toast.error(`Error creating file: ${error.message}`)
           }
+        })
+        .finally(() => {
+          this.newMarkdownFileDialog = false
+          this.newFileName = ''
         })
     }
   },
