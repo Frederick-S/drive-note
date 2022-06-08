@@ -12,7 +12,9 @@ export default new Vuex.Store({
       state.selectedDriveItem = driveItem
     },
     setSelectedDriveItemContent (state, content) {
-      state.selectedDriveItem.content = content
+      if (state.selectedDriveItem) {
+        state.selectedDriveItem.content = content
+      }
     }
   },
   actions: {
