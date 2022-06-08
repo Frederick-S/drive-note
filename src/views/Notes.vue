@@ -158,13 +158,17 @@ export default {
       items: [],
       newMarkdownFileDialog: false,
       newFileName: '',
-      selectedDriveItem: null,
       activeDriveItems: []
+    }
+  },
+  computed: {
+    selectedDriveItem () {
+      return this.$store.state.selectedDriveItem
     }
   },
   methods: {
     selectDriveItem (item) {
-      this.selectedDriveItem = item
+      this.$store.commit('setSelectedDriveItem', item)
     },
     fetchChildren (item) {
       return GraphClient.getDriveItemChildren(item.id)
@@ -210,7 +214,7 @@ export default {
           }
 
           this.activeDriveItems = [item.id]
-          this.selectedDriveItem = item
+          this.selectDriveItem(item)
         })
         .catch((error) => {
           console.error(error)
