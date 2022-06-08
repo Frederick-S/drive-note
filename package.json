@@ -10,11 +10,8 @@
   },
   "dependencies": {
     "@azure/msal-browser": "^2.23.0",
+    "@kangc/v-md-editor": "^1.7.11",
     "@microsoft/microsoft-graph-client": "^3.0.2",
-    "@milkdown/core": "^5.5.0",
-    "@milkdown/preset-commonmark": "^5.5.0",
-    "@milkdown/prose": "^5.5.0",
-    "@milkdown/theme-nord": "^5.5.0",
     "axios": "^0.26.1",
     "core-js": "^3.6.5",
     "vue": "^2.6.11",

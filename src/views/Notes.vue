@@ -197,15 +197,20 @@ export default {
             isFile: true
           }
 
-          if (this.selectedDriveItem) {
-            const parent = this.selectedDriveItem.isFile ? this.selectedDriveItem.parent : this.selectedDriveItem
+          let parent = null
 
+          if (this.selectedDriveItem) {
+            parent = this.selectedDriveItem.isFile ? this.selectedDriveItem.parent : this.selectedDriveItem
+          }
+
+          if (parent) {
             parent.children.push(item)
           } else {
             this.items.push(item)
           }
 
           this.activeDriveItems = [item.id]
+          this.selectedDriveItem = item
         })
         .catch((error) => {
           console.error(error)
