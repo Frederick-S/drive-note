@@ -110,12 +110,12 @@ import { GraphClient } from '../graph/graph-client'
 import Editor from '../components/Editor'
 import { isMarkdownFile } from '../util'
 
-function getTreeItems (items, fileTypes, parent) {
+function getTreeItems (items, fileTypes, parentId, folders) {
   return items.map(it => {
     const child = {
       id: it.id,
       name: it.name,
-      parent,
+      parentId,
       isFile: true,
       content: ''
     }
@@ -123,6 +123,7 @@ function getTreeItems (items, fileTypes, parent) {
     if (it.folder) {
       child.isFile = false
       child.children = []
+      folders[it.id] = child
     } else if (it.file) {
       const fileType = it.file.mimeType.split('/')[1]
 
@@ -160,7 +161,8 @@ export default {
       items: [],
       newMarkdownFileDialog: false,
       newFileName: '',
-      activeDriveItems: []
+      activeDriveItems: [],
+      folders: {}
     }
   },
   computed: {
@@ -196,7 +198,7 @@ export default {
     loadChildren (item) {
       return GraphClient.getDriveItemChildren(item.id)
         .then((response) => {
-          item.children = getTreeItems(response.value, this.fileTypes, item)
+          item.children = getTreeItems(response.value, this.fileTypes, item.id, this.folders)
         })
         .catch((error) => {
           console.error(error)
@@ -226,11 +228,13 @@ export default {
             isFile: true
           }
 
-          let parent = null
+          let parentId = ''
 
           if (this.selectedDriveItem) {
-            parent = this.selectedDriveItem.isFile ? this.selectedDriveItem.parent : this.selectedDriveItem
+            parentId = this.selectedDriveItem.isFile ? this.selectedDriveItem.parentId : this.selectedDriveItem.id
           }
+
+          const parent = this.folders[parentId]
 
           if (parent) {
             parent.children.push(item)
@@ -259,7 +263,7 @@ export default {
   created () {
     GraphClient.getRootDriveItems()
       .then((response) => {
-        this.items = getTreeItems(response.value, this.fileTypes, null)
+        this.items = getTreeItems(response.value, this.fileTypes, null, this.folders)
       })
       .catch((error) => {
         console.error(error)
