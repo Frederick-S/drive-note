@@ -168,6 +168,15 @@ export default {
   computed: {
     selectedDriveItem () {
       return this.$store.state.selectedDriveItem
+    },
+    selectedDriveItemParentId () {
+      let parentId = ''
+
+      if (this.selectedDriveItem) {
+        parentId = this.selectedDriveItem.isFile ? this.selectedDriveItem.parentId : this.selectedDriveItem.id
+      }
+
+      return parentId
     }
   },
   methods: {
@@ -211,12 +220,7 @@ export default {
         })
     },
     createMarkdownFile () {
-      let parentId = ''
-
-      if (this.selectedDriveItem) {
-        parentId = this.selectedDriveItem.isFile ? this.selectedDriveItem.parentId : this.selectedDriveItem.id
-      }
-
+      const parentId = this.selectedDriveItemParentId
       const fileName = `${this.newFileName}.md`
 
       GraphClient.uploadFile(fileName, parentId, '')
@@ -226,12 +230,6 @@ export default {
             name: response.name,
             fileType: 'file',
             isFile: true
-          }
-
-          let parentId = ''
-
-          if (this.selectedDriveItem) {
-            parentId = this.selectedDriveItem.isFile ? this.selectedDriveItem.parentId : this.selectedDriveItem.id
           }
 
           const parent = this.folders[parentId]
