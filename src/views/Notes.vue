@@ -80,7 +80,7 @@
           <v-treeview
             :items="items"
             :active="activeDriveItems"
-            :load-children="fetchChildren"
+            :load-children="loadChildren"
             activatable
             item-key="id"
             open-on-click>
@@ -193,7 +193,7 @@ export default {
           this.$store.commit('setSelectedDriveItem', item)
         })
     },
-    fetchChildren (item) {
+    loadChildren (item) {
       return GraphClient.getDriveItemChildren(item.id)
         .then((response) => {
           item.children = getTreeItems(response.value, this.fileTypes, item)
