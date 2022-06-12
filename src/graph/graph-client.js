@@ -28,10 +28,10 @@ const GraphClient = {
   getDriveItemChildren (itemId) {
     return graphClient.api(`/me/drive/items/${itemId}/children`).get()
   },
-  createMarkdownFile (fileName, parentId) {
+  uploadFile (fileName, parentId, content) {
     const url = parentId ? `/me/drive/items/${parentId}:/${fileName}:/content` : `/me/drive/root:/${fileName}:/content`
 
-    return graphClient.api(url).put()
+    return graphClient.api(url).put(content)
   },
   getFileContent (itemId) {
     return graphClient.api(`/me/drive/items/${itemId}?select=id,@microsoft.graph.downloadUrl`)

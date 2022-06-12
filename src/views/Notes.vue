@@ -211,7 +211,7 @@ export default {
 
       const fileName = `${this.newFileName}.md`
 
-      GraphClient.createMarkdownFile(fileName, parentId)
+      GraphClient.uploadFile(fileName, parentId, '')
         .then((response) => {
           const item = {
             id: response.id,
