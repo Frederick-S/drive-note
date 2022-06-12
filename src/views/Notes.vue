@@ -229,7 +229,8 @@ export default {
             id: response.id,
             name: response.name,
             fileType: 'file',
-            isFile: true
+            isFile: true,
+            parentId
           }
 
           const parent = this.folders[parentId]
