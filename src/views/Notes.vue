@@ -108,6 +108,7 @@
 <script>
 import { GraphClient } from '../graph/graph-client'
 import Editor from '../components/Editor'
+import { isMarkdownFile } from '../util'
 
 function getTreeItems (items, fileTypes, parent) {
   return items.map(it => {
@@ -169,11 +170,7 @@ export default {
   },
   methods: {
     selectDriveItem (item) {
-      const name = item.name
-      const lastIndexOfDot = name.lastIndexOf('.')
-      const extension = name.substring(lastIndexOfDot + 1)
-
-      if (extension !== 'md') {
+      if (!isMarkdownFile(item.name)) {
         this.$store.commit('setSelectedDriveItem', item)
 
         return
