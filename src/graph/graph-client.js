@@ -2,6 +2,7 @@ import * as msal from '@azure/msal-browser'
 import { AuthCodeMSALBrowserAuthenticationProvider } from '@microsoft/microsoft-graph-client/authProviders/authCodeMsalBrowser'
 import { Client } from '@microsoft/microsoft-graph-client'
 import { MsalManager } from './msal-manager'
+import axios from 'axios'
 
 const scopes = ['user.read', 'Files.ReadWrite']
 
@@ -28,11 +29,38 @@ const GraphClient = {
     return graphClient.api(`/me/drive/items/${itemId}/children`).get()
   },
   createMarkdownFile (fileName, parentId) {
-    if (parentId) {
-      return graphClient.api(`/me/drive/items/${parentId}:/${fileName}:/content`).put()
-    } else {
-      return graphClient.api(`/me/drive/root:/${fileName}:/content`).put()
-    }
+    const url = parentId ? `/me/drive/items/${parentId}:/${fileName}:/content` : `/me/drive/root:/${fileName}:/content`
+
+    return graphClient.api(url).put()
+  },
+  getFileContent (itemId) {
+    return graphClient.api(`/me/drive/items/${itemId}?select=id,@microsoft.graph.downloadUrl`)
+      .get()
+      .then((response) => {
+        const downloadUrl = response['@microsoft.graph.downloadUrl']
+
+        return axios.get(downloadUrl, {
+          responseType: 'blob'
+        })
+      })
+      .then((response) => {
+        const promise = new Promise((resolve, reject) => {
+          const blob = new Blob([response.data], {
+            type: response.headers['content-type']
+          })
+
+          const reader = new FileReader()
+          reader.onload = (e) => {
+            resolve(e.target.result)
+          }
+          reader.onerror = (e) => {
+            reject(e)
+          }
+          reader.readAsText(blob)
+        })
+
+        return promise
+      })
   }
 }
 

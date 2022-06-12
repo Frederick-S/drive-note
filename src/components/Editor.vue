@@ -10,7 +10,7 @@ export default {
   computed: {
     content: {
       get () {
-        const item = this.$store.selecteddriveitem
+        const item = this.$store.state.selectedDriveItem
 
         if (item) {
           return item.content

@@ -115,7 +115,8 @@ function getTreeItems (items, fileTypes, parent) {
       id: it.id,
       name: it.name,
       parent,
-      isFile: true
+      isFile: true,
+      content: ''
     }
 
     if (it.folder) {
@@ -168,7 +169,28 @@ export default {
   },
   methods: {
     selectDriveItem (item) {
-      this.$store.commit('setSelectedDriveItem', item)
+      const name = item.name
+      const lastIndexOfDot = name.lastIndexOf('.')
+      const extension = name.substring(lastIndexOfDot + 1)
+
+      if (extension !== 'md') {
+        this.$store.commit('setSelectedDriveItem', item)
+
+        return
+      }
+
+      GraphClient.getFileContent(item.id)
+        .then((content) => {
+          item.content = content
+        })
+        .catch((error) => {
+          console.error(error)
+
+          this.$toast.error(`Error fetching file content: ${error.message}`)
+        })
+        .finally(() => {
+          this.$store.commit('setSelectedDriveItem', item)
+        })
     },
     fetchChildren (item) {
       return GraphClient.getDriveItemChildren(item.id)
