@@ -183,7 +183,11 @@ export default {
         .catch((error) => {
           console.error(error)
 
-          this.$toast.error(`Error fetching file content: ${error.message}`)
+          if (error.code === 'InvalidAuthenticationToken') {
+            this.$router.push('/login')
+          } else {
+            this.$toast.error(`Error fetching file content: ${error.message}`)
+          }
         })
         .finally(() => {
           this.$store.commit('setSelectedDriveItem', item)
@@ -199,6 +203,8 @@ export default {
 
           if (error.code === 'InvalidAuthenticationToken') {
             this.$router.push('/login')
+          } else {
+            this.$toast.error(`Error fetching children: ${error.message}`)
           }
         })
     },
@@ -260,6 +266,8 @@ export default {
 
         if (error.code === 'InvalidAuthenticationToken') {
           this.$router.push('/login')
+        } else {
+          this.$toast.error(`Error fetch drive items: ${error.message}`)
         }
       })
   }
