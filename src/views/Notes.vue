@@ -76,7 +76,7 @@
       <v-col
         cols="3"
       >
-        <v-row>
+        <v-row class="file-explorer">
           <v-treeview
             :items="items"
             :active="activeDriveItems"
@@ -265,3 +265,9 @@ export default {
   }
 }
 </script>
+
+<style>
+.file-explorer {
+  border-right: 1px solid #e0e0e0;
+}
+</style>

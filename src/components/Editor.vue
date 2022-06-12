@@ -1,6 +1,9 @@
 <template>
   <v-container>
-    <v-md-editor v-if="isMarkdownFile" v-model="content" height="500px" @save="save"></v-md-editor>
+    <div v-if="isMarkdownFile">
+      <h1 class="title">{{ fileName }}</h1>
+      <v-md-editor v-model="content" height="500px" @save="save"></v-md-editor>
+    </div>
   </v-container>
 </template>
 
@@ -18,15 +21,18 @@ export default {
         return item && isMarkdownFile(item.name)
       }
     },
+    fileName: {
+      get () {
+        const item = this.$store.state.selectedDriveItem
+
+        return item.name
+      }
+    },
     content: {
       get () {
         const item = this.$store.state.selectedDriveItem
 
-        if (item) {
-          return item.content
-        } else {
-          return ''
-        }
+        return item.content
       },
       set (value) {
         this.$store.commit('setSelectedDriveItemContent', value)
@@ -53,3 +59,10 @@ export default {
   }
 }
 </script>
+
+<style>
+.title {
+  margin: 12px 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+</style>
