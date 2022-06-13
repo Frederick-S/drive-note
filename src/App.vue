@@ -15,10 +15,16 @@ export default {
     if (!account) {
       this.$router.push('/login')
     } else {
-      // Todo: check if account is still valid
       GraphClient.init(account)
+      GraphClient.getMe()
+        .then((response) => {
+          this.$router.push('/notes')
+        })
+        .catch((error) => {
+          console.error(error)
 
-      this.$router.push('/notes')
+          this.$router.push('/login')
+        })
     }
   }
 }

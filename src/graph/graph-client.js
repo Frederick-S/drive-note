@@ -22,6 +22,9 @@ const GraphClient = {
       throw new Error('Failed to initialize graph client')
     }
   },
+  getMe () {
+    return graphClient.api('/me').get()
+  },
   getRootDriveItems () {
     return graphClient.api('/me/drive/root/children').get()
   },
