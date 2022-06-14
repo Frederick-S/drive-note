@@ -1,5 +1,11 @@
 <template>
   <v-container>
+    <v-overlay :value="overlay">
+      <v-progress-circular
+        indeterminate
+        size="64"
+      ></v-progress-circular>
+    </v-overlay>
     <v-dialog
       v-model="newMarkdownFileDialog"
       width="500"
@@ -159,10 +165,11 @@ export default {
         file: 'mdi-file'
       },
       items: [],
-      newMarkdownFileDialog: false,
-      newFileName: '',
+      folders: {},
       activeDriveItems: [],
-      folders: {}
+      overlay: false,
+      newFileName: '',
+      newMarkdownFileDialog: false
     }
   },
   computed: {
@@ -260,6 +267,8 @@ export default {
     }
   },
   created () {
+    this.overlay = true
+
     GraphClient.getRootDriveItems()
       .then((response) => {
         this.items = getTreeItems(response.value, this.fileTypes, null, this.folders)
@@ -273,6 +282,9 @@ export default {
           this.$toast.error(`Error fetch drive items: ${error.message}`)
         }
       })
+      .finally(() => {
+        this.overlay = false
+      })
   }
 }
 </script>
@@ -280,5 +292,6 @@ export default {
 <style>
 .file-explorer {
   border-right: 1px solid #e0e0e0;
+  overflow: auto;
 }
 </style>
