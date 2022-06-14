@@ -194,6 +194,8 @@ export default {
         return
       }
 
+      this.overlay = true
+
       GraphClient.getFileContent(item.id)
         .then((content) => {
           item.content = content
@@ -208,6 +210,7 @@ export default {
           }
         })
         .finally(() => {
+          this.overlay = false
           this.$store.commit('setSelectedDriveItem', item)
         })
     },
