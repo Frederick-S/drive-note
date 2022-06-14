@@ -28,8 +28,6 @@ const MsalManager = {
           }
         })
         .catch(error => {
-          console.error(error)
-
           reject(error)
         })
     })

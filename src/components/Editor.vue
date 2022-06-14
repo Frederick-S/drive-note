@@ -1,5 +1,11 @@
 <template>
   <v-container>
+    <v-overlay :value="overlay">
+      <v-progress-circular
+        indeterminate
+        size="64"
+      ></v-progress-circular>
+    </v-overlay>
     <div v-if="isMarkdownFile">
       <h1 class="title">{{ fileName }}</h1>
       <v-md-editor v-model="content" height="500px" @save="save"></v-md-editor>
@@ -13,20 +19,21 @@ import { isMarkdownFile } from '../util'
 
 export default {
   name: 'Editor',
+  data () {
+    return {
+      overlay: false
+    }
+  },
   computed: {
-    isMarkdownFile: {
-      get () {
-        const item = this.$store.state.selectedDriveItem
+    isMarkdownFile () {
+      const item = this.$store.state.selectedDriveItem
 
-        return item && isMarkdownFile(item.name)
-      }
+      return item && isMarkdownFile(item.name)
     },
-    fileName: {
-      get () {
-        const item = this.$store.state.selectedDriveItem
+    fileName () {
+      const item = this.$store.state.selectedDriveItem
 
-        return item.name
-      }
+      return item.name
     },
     content: {
       get () {
@@ -48,12 +55,23 @@ export default {
       const item = this.$store.state.selectedDriveItem
       const parentId = item.isFile ? item.parentId : item.id
 
+      this.overlay = true
+
       GraphClient.uploadFile(item.name, parentId, text)
         .then((response) => {
-          console.log(response)
+          // Ignore
         })
         .catch((error) => {
           console.error(error)
+
+          if (error.code === 'InvalidAuthenticationToken') {
+            this.$router.push('/login')
+          } else {
+            this.$toast.error(`Error uploading file: ${error.message}`)
+          }
+        })
+        .finally(() => {
+          this.overlay = false
         })
     }
   }
