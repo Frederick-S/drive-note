@@ -6,9 +6,17 @@
         size="64"
       ></v-progress-circular>
     </v-overlay>
-    <div v-if="isMarkdownFile">
-      <h1 class="title">{{ fileName }}</h1>
-      <v-md-editor v-model="content" height="500px" @save="save"></v-md-editor>
+    <div v-if="!selectedDriveItem || !selectedDriveItem.isFile">
+      <p>No file selected.</p>
+    </div>
+    <div v-else>
+      <template v-if="isMarkdownFile">
+        <h1 class="title">{{ fileName }}</h1>
+        <v-md-editor v-model="content" height="500px" @save="save"></v-md-editor>
+      </template>
+      <template v-else>
+        <p>Please select a markdown file.</p>
+      </template>
     </div>
   </v-container>
 </template>
@@ -25,6 +33,9 @@ export default {
     }
   },
   computed: {
+    selectedDriveItem () {
+      return this.$store.state.selectedDriveItem
+    },
     isMarkdownFile () {
       const item = this.$store.state.selectedDriveItem
 
