@@ -12,7 +12,7 @@
     <div v-else>
       <template v-if="isMarkdownFile">
         <h1 class="title">{{ fileName }}</h1>
-        <v-md-editor v-model="content" height="500px" @save="save"></v-md-editor>
+        <v-md-editor v-model="content" height="calc(100vh - 190px)" @save="save"></v-md-editor>
       </template>
       <template v-else>
         <p>Please select a markdown file.</p>
