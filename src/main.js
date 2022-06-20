@@ -24,6 +24,7 @@ import 'codemirror/addon/selection/active-line'
 import 'codemirror/addon/scroll/simplescrollbars'
 import 'codemirror/addon/scroll/simplescrollbars.css'
 import 'codemirror/lib/codemirror.css'
+import createKatexPlugin from '@kangc/v-md-editor/lib/plugins/katex/cdn'
 
 Vue.config.productionTip = false
 
@@ -31,6 +32,7 @@ VueMarkdownEditor.Codemirror = Codemirror
 VueMarkdownEditor.use(githubTheme, {
   Hljs: hljs
 })
+VueMarkdownEditor.use(createKatexPlugin())
 
 Vue.use(Toast, {
   position: POSITION.TOP_CENTER,
