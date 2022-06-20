@@ -67,12 +67,6 @@
                   Markdown File
                 </v-list-item-title>
               </v-list-item>
-              <v-list-item link>
-                <v-icon>mdi-folder</v-icon>
-                <v-list-item-title>
-                  Folder
-                </v-list-item-title>
-              </v-list-item>
             </v-list>
           </v-menu>
         </v-container>
