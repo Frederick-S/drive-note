@@ -37,18 +37,18 @@ export default {
       return this.$store.state.selectedDriveItem
     },
     isMarkdownFile () {
-      const item = this.$store.state.selectedDriveItem
+      const item = this.selectedDriveItem
 
       return item && isMarkdownFile(item.name)
     },
     fileName () {
-      const item = this.$store.state.selectedDriveItem
+      const item = this.selectedDriveItem
 
       return item.name
     },
     content: {
       get () {
-        const item = this.$store.state.selectedDriveItem
+        const item = this.selectedDriveItem
 
         return item.content
       },
