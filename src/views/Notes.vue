@@ -71,6 +71,11 @@
           </v-menu>
         </v-container>
       </v-col>
+      <v-col cols=9>
+        <div class="container text-align-right" v-if="me">
+          <span>Welcome, {{ me.displayName }}</span>
+        </div>
+      </v-col>
     </v-row>
     <v-row>
       <v-col
@@ -163,7 +168,8 @@ export default {
       activeDriveItems: [],
       overlay: false,
       newFileName: '',
-      newMarkdownFileDialog: false
+      newMarkdownFileDialog: false,
+      me: null
     }
   },
   computed: {
@@ -266,6 +272,11 @@ export default {
   created () {
     this.overlay = true
 
+    GraphClient.getMe()
+      .then((response) => {
+        this.me = response
+      })
+
     GraphClient.getRootDriveItems()
       .then((response) => {
         this.items = getTreeItems(response.value, this.fileTypes, null, this.folders)
@@ -291,5 +302,8 @@ export default {
   border-right: 1px solid #e0e0e0;
   overflow: auto;
   height: calc(100vh - 84px);
+}
+.text-align-right {
+  text-align: right;
 }
 </style>
