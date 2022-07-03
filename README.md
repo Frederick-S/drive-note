@@ -5,6 +5,8 @@ I prefer to write notes in markdown files and save them in OneDrive locally. But
 
 BTW, OneDrive online now supports editing files online, but with limited preview feature.
 
+> https://drive-note.dekiru.app has to be registered as a multitenant app which requires a verified publisher. Currently https://drive-note.dekiru.app is powered by `Microsoft 365 Developer Program` which seems works properly even without a verified publisher. But it might not work in the future.
+
 ## Getting started
 First, follow the [instructions](https://docs.microsoft.com/en-my/graph/auth-register-app-v2) to register a new app. 
 
