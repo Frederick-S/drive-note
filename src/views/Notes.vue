@@ -74,6 +74,25 @@
       <v-col cols=9>
         <div class="container text-align-right" v-if="me">
           <span>Welcome, {{ me.displayName }}</span>
+          <v-menu
+            offset-y>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                small
+                plain
+                v-bind="attrs"
+                v-on="on">
+                <v-icon>mdi-menu</v-icon>
+              </v-btn>
+            </template>
+            <v-list>
+              <v-list-item link>
+                <v-list-item-title @click="signOut">
+                  Sign out
+                </v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
         </div>
       </v-col>
     </v-row>
@@ -267,6 +286,11 @@ export default {
           this.newMarkdownFileDialog = false
           this.newFileName = ''
         })
+    },
+    signOut () {
+      localStorage.removeItem('drive-note-account')
+
+      this.$router.push('/login')
     }
   },
   created () {
@@ -275,6 +299,9 @@ export default {
     GraphClient.getMe()
       .then((response) => {
         this.me = response
+      })
+      .catch((error) => {
+        console.error(error)
       })
 
     GraphClient.getRootDriveItems()
