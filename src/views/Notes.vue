@@ -249,6 +249,12 @@ export default {
         })
     },
     createMarkdownFile () {
+      if (!this.newFileName || !this.newFileName.trim()) {
+        this.$toast.error('File name is required')
+
+        return
+      }
+
       const parentId = this.selectedDriveItemParentId
       const fileName = `${this.newFileName}.md`
 
